@@ -46,7 +46,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 export const loginUser = asyncHandler(async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Please provide email and password",
     });
   }
@@ -54,9 +54,10 @@ export const loginUser = asyncHandler(async (req, res) => {
   const emailUser = await User.findOne({ email: req.body.email });
 
   if (emailUser && (await emailUser.isPasswordCorrect(req.body.password))) {
-    createSendResToken(emailUser, 200, res);
+    return createSendResToken(emailUser, 200, res);
   }
-  res.status(401).json({
+
+  return res.status(401).json({
     message: "Invalid email or password",
   });
 });
