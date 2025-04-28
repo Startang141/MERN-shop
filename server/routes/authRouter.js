@@ -1,6 +1,5 @@
 import express from "express";
-import User from "../models/userModel.js";
-import asynchandler from "../middlewares/asyncHandler.js";
+import { registerUser } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -8,15 +7,7 @@ router.post("/login", (req, res) => {
   res.send("Login route");
 });
 
-router.post(
-  "/register",
-  asynchandler(async (req, res) => {
-    console.log(req.body);
-    await User.create({
-      name: req.body.name,
-    });
-  })
-);
+router.post("/register", registerUser);
 
 router.get("/logout", (req, res) => {
   res.send("Logout route");
