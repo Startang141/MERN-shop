@@ -31,8 +31,6 @@ const createSendResToken = (user, statusCode, res) => {
 };
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const isOwner = (await User.countDocuments()) === 0;
-
   const role = "user";
   const createUser = await User.create({
     name: req.body.name,
@@ -59,5 +57,29 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   return res.status(401).json({
     message: "Invalid email or password",
+  });
+});
+
+export const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (user) {
+    return res.status(200).json({
+      user,
+    });
+  } else {
+    res.status(404);
+    throw new Error("user not found");
+  }
+});
+
+export const logoutUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
+  res.status(200).json({
+    message: "Logout Berhasil",
   });
 });

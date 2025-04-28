@@ -1,5 +1,6 @@
 import express from "express";
 import authRouter from "./routes/authRouter.js";
+import productRouter from "./routes/productRouter.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRouter);
+app.use("/api/products", productRouter);
 app.use(notFound);
 app.use(errorHandler);
 
