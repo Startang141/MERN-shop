@@ -21,3 +21,13 @@ export const protectedMiddleware = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+export const adminMiddleware = (req, res, next) => {
+  if (req.user && req.user.role === "owner") {
+    next();
+  } else {
+    res.status(403).json({
+      message: "Not authorized as an admin",
+    });
+  }
+};

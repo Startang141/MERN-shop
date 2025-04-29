@@ -35,13 +35,39 @@ export const detailProduct = asyncHandler(async (req, res) => {
 });
 
 export const updateProduct = asyncHandler(async (req, res) => {
-  res.send("Update Product");
+  const { id } = req.params;
+  const updateProduct = await Product.findByIdAndUpdate(id, req.body, {
+    runValidators: false,
+    new: true,
+  });
+
+  return res.status(201).json({
+    message: "update product successfully",
+    data: updateProduct,
+  });
 });
 
 export const deleteProduct = asyncHandler(async (req, res) => {
-  res.send("Delete Product");
+  const { id } = req.params;
+  const deleteProduct = await Product.findByIdAndDelete(id);
+
+  return res.status(200).json({
+    message: "deleted product successfully",
+  });
 });
 
 export const fileUpload = asyncHandler(async (req, res) => {
-  res.send("File Upload Product");
+  const file = req.file;
+  if (!file) {
+    res.status(400);
+    throw new Error("No file uploaded");
+  }
+
+  const imageFileName = file.filename;
+  const pathImageFile = `/upload/${imageFileName}`;
+
+  res.status(200).json({
+    message: "Image uploaded",
+    image: pathImageFile,
+  });
 });

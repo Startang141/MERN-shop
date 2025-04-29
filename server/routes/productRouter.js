@@ -1,5 +1,8 @@
 import express from "express";
-import { protectedMiddleware } from "../middlewares/authMiddleware.js";
+import {
+  protectedMiddleware,
+  adminMiddleware,
+} from "../middlewares/authMiddleware.js";
 import {
   allProduct,
   createProduct,
@@ -8,19 +11,26 @@ import {
   fileUpload,
   updateProduct,
 } from "../controllers/productController.js";
+import { upload } from "../utils/uploadFileHandler.js";
 
 const router = express.Router();
 
-router.post("/file-upload", fileUpload);
+router.post(
+  "/file-upload",
+  protectedMiddleware,
+  adminMiddleware,
+  upload.single("image"),
+  fileUpload
+);
 
-router.post("/", createProduct);
+router.post("/", protectedMiddleware, adminMiddleware, createProduct);
 
 router.get("/", allProduct);
 
-router.put("/:id", updateProduct);
+router.put("/:id", protectedMiddleware, adminMiddleware, updateProduct);
 
 router.post("/:id", detailProduct);
 
-router.delete("/:id", deleteProduct);
+router.delete("/:id", protectedMiddleware, adminMiddleware, deleteProduct);
 
 export default router;
