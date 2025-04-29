@@ -1,6 +1,7 @@
 import express from "express";
 import authRouter from "./routes/authRouter.js";
 import productRouter from "./routes/productRouter.js";
+import orderRouter from "./routes/orderRouter.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -14,9 +15,11 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("./public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/order", orderRouter);
 app.use(notFound);
 app.use(errorHandler);
 
